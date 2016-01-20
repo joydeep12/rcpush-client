@@ -1,4 +1,4 @@
-sdk: "~/GitHub/rhodes"
+#sdk: "~/GitHub/rhodes"
 sdkversion: 5.0.0
 name: testclient
 version: 1.0
@@ -7,14 +7,16 @@ build: debug
 applog: rholog.txt
 iphone:
   configuration: Release
-  sdk: iphoneos8.4
+  sdk: iphoneos9.0
   provisionprofile:
   codesignidentity: iPhone Developer
   entitlements: ""
   BundleIdentifier: com.rhomobile.testclient
   BundleURLScheme: testclient
-  production:
-    ipa_itunesartwork_image: "./production/iTunesArtwork.png"  
+  # production:
+  #   ipa_itunesartwork_image: "./production/iTunesArtwork.png"  
+  # capabilities:
+  # - push
 wp8:
   productid: '9278e170-28d2-0133-c16a-6c4008b503f8'
 android:
@@ -28,13 +30,12 @@ wm:
   #sdk: "MC3000c50b (ARMV4I)"
   #sdk: "Windows Mobile 6.5.3 Professional DTK (ARMV4I)"
 
-extensions: ["rhoconnect-client"]
+extensions: ["rhoconnect-client", "rhoconnect-push"]
 
+sdk: /Users/home/GitHub/rhodes
 paths:
   extensions:
   - /Users/home/GitHub/Motorola-Extensions/extensions
   - /Users/home/GitHub/Motorola-Extensions/lib/commonAPI
   - /Users/home/GitHub/rhoconnect-client/ext
 app_type: rhoelements
-
-encrypt_database: 1

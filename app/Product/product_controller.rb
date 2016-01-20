@@ -55,4 +55,27 @@ class ProductController < Rho::RhoController
     @product.destroy if @product
     redirect :action => :index  
   end
+
+  def crd
+    #lets create few new records
+    # Product.create({"name"=>"Acme6", "industry"=>"Electronics6"})
+    # Product.create({"name"=>"Best6", "industry"=>"Software6"})
+    # Product.create({"name"=>"Acme7", "industry"=>"Electronics7"})
+    # Product.create({"name"=>"Best7", "industry"=>"Software7"})
+    #Lets Update existing records
+    id = 1
+    @product = Product.find(id)
+    @product.update_attributes("name"=>"BHAKTA1_1", "industry"=>"BHElectronics1") if @product
+    # id = 2
+    # @product = Product.find(id)
+    # @product.update_attributes("name"=>"BHAKTA1_2", "industry"=>"Software1") if @product
+    # #Lets Delete existing records
+    # id = 3
+    # @product = Product.find(id)
+    # @product.destroy if @product
+    # id = 4
+    # @product = Product.find(id)
+    # @product.destroy if @product
+    redirect :action => :index 
+  end
 end

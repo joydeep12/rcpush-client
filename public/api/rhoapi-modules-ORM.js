@@ -453,12 +453,12 @@
           if(what === undefined)
             what = "all";
           var found = opalModel.$find(what,options);
-	  if(what !== 'count')
-	  {	
-	          if(JSON.stringify(found).length == 2)
-	            return [];
+		  if(what !== 'count')
+		  {	
+          if(JSON.stringify(found).length == 2)
+            return [];
           }
-	  switch (what) {
+		  switch (what) {
               case 'all'  : return wrapOpalObjects(found);
               case 'count': return                 found ;
               case 'first':

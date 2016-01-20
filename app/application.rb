@@ -13,7 +13,7 @@ class AppApplication < Rho::RhoApplication
     # Uncomment to set sync notification callback to /app/Settings/sync_notify.
     # Rho::RhoConnectClient.setObjectNotification("/app/Settings/sync_notify")
     Rho::RhoConnectClient.setNotification('*', "/app/Settings/sync_notify", '')
-    #Rho::Push.startNotifications '/app/Settings/push_callback'
+    Rho::Push.startNotifications '/app/Settings/push_callback'
     
   end
 end

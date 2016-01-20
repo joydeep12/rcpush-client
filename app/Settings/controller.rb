@@ -86,33 +86,53 @@ class SettingsController < Rho::RhoController
   	elsif status == "complete"
       Rho::WebView.navigate Rho::RhoConfig.start_path if @params['sync_type'] != 'bulk'
   	elsif status == "error"
-	
-      if @params['server_errors'] && @params['server_errors']['create-error']
-        Rho::RhoConnectClient.on_sync_create_error(
-          @params['source_name'], @params['server_errors']['create-error'].keys, :recreate )
+      puts "BHAKTA:"
+      puts "#{@params.inspect}"	
+      puts "END:"
+      # if @params['server_errors'] && @params['server_errors']['create-error']
+      #   Rho::RhoConnectClient.on_sync_create_error(
+      #     @params['source_name'], @params['server_errors']['create-error'].keys, :recreate )
+      # end
+      #Product.onSyncCreateError(@params['server_errors']['create-error'].keys, :recreate)
+      #Product.onSyncCreateError(@params['server_errors']['create-error'].keys, :delete)
+      
+      @params['server_errors']['update-error'].each do |key,value|
+        Product.onSyncUpdateError(key,value['attributes'],{},:retry)
       end
 
-      if @params['server_errors'] && @params['server_errors']['update-error']
-        Rho::RhoConnectClient.on_sync_update_error(
-          @params['source_name'], @params['server_errors']['update-error'], :retry )
-      end
-      
-      err_code = @params['error_code'].to_i
-      rho_error = Rho::RhoError.new(err_code)
-      
-      @msg = @params['error_message'] if err_code == Rho::RhoError::ERR_CUSTOMSYNCSERVER
-      @msg = rho_error.message unless @msg && @msg.length > 0   
+      # @params['server_errors']['update-rollback'].each do |key,value|
+      #   Product.onSyncUpdateError(key,{},value['attributes'],:rollback)
+      # end
 
-      if rho_error.unknown_client?( @params['error_message'] )
-        Rhom::Rhom.database_client_reset
-        Rho::RhoConnectClient.doSync
-      elsif err_code == Rho::RhoError::ERR_UNATHORIZED
-        Rho::WebView.navigate(
-          url_for :action => :login, 
-          :query => {:msg => "Server credentials are expired"} )                
-      elsif err_code != Rho::RhoError::ERR_CUSTOMSYNCSERVER
-        Rho::WebView.navigate( url_for :action => :err_sync, :query => { :msg => @msg } )
-      end    
+      # @params['server_errors']['delete-error'].each do |key,value|
+      #   Product.onSyncDeleteError(key,value['attributes'],:retry)
+      # end
+      
+      # Product.onSyncUpdateError(@params['server_errors']['update-rollback'],:rollback)
+
+      # Product.onSyncDeleteError(@params['server_errors']['delete-error'],:retry)
+
+      # if @params['server_errors'] && @params['server_errors']['update-error']
+      #   Rho::RhoConnectClient.on_sync_update_error(
+      #     @params['source_name'], @params['server_errors']['update-error'], :retry )
+      # end
+      
+      # err_code = @params['error_code'].to_i
+      # rho_error = Rho::RhoError.new(err_code)
+      
+      # @msg = @params['error_message'] if err_code == Rho::RhoError::ERR_CUSTOMSYNCSERVER
+      # @msg = rho_error.message unless @msg && @msg.length > 0   
+
+      # if rho_error.unknown_client?( @params['error_message'] )
+      #   Rhom::Rhom.database_client_reset
+      #   Rho::RhoConnectClient.doSync
+      # elsif err_code == Rho::RhoError::ERR_UNATHORIZED
+      #   Rho::WebView.navigate(
+      #     url_for :action => :login, 
+      #     :query => {:msg => "Server credentials are expired"} )                
+      # elsif err_code != Rho::RhoError::ERR_CUSTOMSYNCSERVER
+      #   Rho::WebView.navigate( url_for :action => :err_sync, :query => { :msg => @msg } )
+      # end    
 	end
   end  
 
@@ -130,7 +150,12 @@ class SettingsController < Rho::RhoController
       Alert.show_popup "#{ex.inspect}"
     end
   end
-  
 
-  
+  def test_has
+    data = Product.find(:all)
+    data.each do |obj|
+      Alert.show_popup "#{obj.inspect}"
+      Alert.show_popup "#{Product.hasChanges(obj.object)}"
+    end
+  end
 end
